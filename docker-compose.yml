@@ -1,0 +1,68 @@
+services:
+
+    mongo:
+        image: mongo
+        container_name: personal_learning_assistant_mongo
+        ports:
+            - "27017:27017"
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: admin
+            MONGO_INITDB_ROOT_PASSWORD: password
+
+    
+        volumes:
+            - mongo_data:/data/db
+        
+        restart : unless-stopped
+
+        networks:
+            - personal_learning_assistant-network
+        
+    redis:
+        image: redis:8-alpine
+        container_name: personal_learning_assistant_redis
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
+        
+        command:  redis-server --appendonly yes
+        restart: unless-stopped
+
+        networks:
+            - personal_learning_assistant-network
+    
+    server:
+        build: 
+            context: ./server
+            dockerfile: Dockerfile
+        
+        command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app/app
+
+        ports:
+            - "8000:8000"
+
+        env_file:
+            - ./server/.env
+        
+        volumes:
+            - ./server:/app
+
+        depends_on:
+            - mongo
+            - redis
+
+        restart: unless-stopped
+
+        networks:
+            - personal_learning_assistant-network
+
+
+volumes:
+    mongo_data:
+    redis_data:
+    personal_learning_assistant_data:
+
+networks:
+    personal_learning_assistant-network:
+        driver : bridge    

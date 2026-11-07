@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+pymongo
+redis
+python-dotenv
+pydantic
+pydantic-settings
+argon2-cffi
+pyJWT
+pydantic[email]
+httpx
+langchain
+
