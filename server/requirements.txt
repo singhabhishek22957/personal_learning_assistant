@@ -10,4 +10,6 @@ pyJWT
 pydantic[email]
 httpx
 langchain
-
+langgraph
+langchain-core
+langchain-ollama

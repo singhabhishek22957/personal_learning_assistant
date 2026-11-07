@@ -95,6 +95,12 @@ from app.modules.user.user_route import router as user_router
 app.include_router(user_router)
 
 
+# chat route 
+from app.modules.chat.chat_route import router as chat_router
+
+app.include_router(chat_router)
+
+
 @app.get('/')
 async def root():
     return {
